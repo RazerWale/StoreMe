@@ -2,7 +2,7 @@
   "version": 3,
   "sources": [],
   "sections": [
-    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["turbopack://[project]/app/(root)/page.tsx"],"sourcesContent":["import React from \"react\";\n\nconst page = () => {\n  return <div>hello</div>;\n};\n\nexport default page;\n"],"names":[],"mappings":";;;;;AAEA,MAAM,OAAO;IACX,qBAAO,8OAAC;kBAAI;;;;;;AACd;uCAEe"}},
+    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["turbopack://[project]/app/(root)/page.tsx"],"sourcesContent":["import React from \"react\";\n\nexport default function Home() {\n  return (\n    <div className=\"text-3xl text-blue center\">\n      StoreMe - The only storage solution you need.\n    </div>\n  );\n}\n"],"names":[],"mappings":";;;;;AAEe,SAAS;IACtB,qBACE,8OAAC;QAAI,WAAU;kBAA4B;;;;;;AAI/C"}},
     {"offset": {"line": 22, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}},
     {"offset": {"line": 33, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":""}},
     {"offset": {"line": 33, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}},
