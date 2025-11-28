@@ -132,7 +132,6 @@ const AuthForm = ({ type }: { type: FormType }) => {
         </form>
       </Form>
       {/* {OTP authentication} */}
-      <div></div>
     </>
   );
 };
