@@ -17,13 +17,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-const formSchema = z.object({
-  fullname: z.string().min(2).max(50),
-  email: z.string().min(2).max(50),
-});
-
+// declaring that there are only two types possible, A or B
 type FormType = "sign-in" | "sign-up";
 
+// schema of the form, it takes form type as a atribute and base of that constract form schema
 const authFormSchema = (formType: FormType) => {
   return z.object({
     email: z.string().email(),
@@ -32,6 +29,7 @@ const authFormSchema = (formType: FormType) => {
   });
 };
 
+// the form itself
 const AuthForm = ({ type }: { type: FormType }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
