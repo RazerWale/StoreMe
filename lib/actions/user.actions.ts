@@ -18,6 +18,7 @@ import { parseStringify } from "../utils";
 const getUserByEmail = async (email: string) => {
   const { databases } = await createAdminClient();
 
+  console.log(databases);
   const result = await databases.listTables({
     databaseId: appwriteConfig.databaseId,
     queries: [Query.equal("email", email)],
@@ -45,7 +46,7 @@ const sendEmailOTP = async ({ email }: { email: string }) => {
   }
 };
 
-const createAccount = async ({
+export const createAccount = async ({
   fullName,
   email,
 }: {
@@ -72,6 +73,6 @@ const createAccount = async ({
       },
     });
   }
-
+  console.log(accountId);
   return parseStringify({ accountId });
 };

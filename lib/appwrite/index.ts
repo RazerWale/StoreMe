@@ -28,7 +28,6 @@ export const createAdminClient = async () => {
     .setKey(appwriteConfig.secretKey);
 
   const session = (await cookies()).get("appwrite-sesion");
-
   if (!session || !session.value) throw new Error("No session");
 
   client.setSession(session.value);
