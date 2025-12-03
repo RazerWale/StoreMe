@@ -1,7 +1,7 @@
 "use server";
 
 import { Query, ID } from "node-appwrite";
-import { createAdminClient } from "../appwrite";
+import { createAdminClient, createDummyClient } from "../appwrite";
 import { appwriteConfig } from "../appwrite/config";
 import { string } from "zod";
 import { parseStringify } from "../utils";
@@ -15,16 +15,46 @@ import { parseStringify } from "../utils";
 // 6. return the user's accountId that will be userd to complete the logic.
 // 7. Verify OTP and authenticate to login
 
+export const getUsers = async () => {
+  const { databases } = await createDummyClient();
+
+  const result = await databases.listRows({
+    databaseId: appwriteConfig.databaseId,
+    tableId: appwriteConfig.usersTableId,
+  });
+  return result;
+  console.log(result);
+};
+
+export const insertUsers = async (
+  email: string,
+  fullName: string,
+  accountId: string
+) => {
+  const { databases } = await createDummyClient();
+
+  const result = await databases.createRow({
+    databaseId: appwriteConfig.databaseId,
+    tableId: appwriteConfig.usersTableId,
+    rowId: accountId,
+    data: {
+      fullName,
+      email,
+      accountId,
+    },
+  });
+  //   return result;
+};
 const getUserByEmail = async (email: string) => {
   const { databases } = await createAdminClient();
 
-  console.log(databases);
-  const result = await databases.listTables({
+  const result = await databases.listRows({
     databaseId: appwriteConfig.databaseId,
+    tableId: appwriteConfig.usersTableId,
     queries: [Query.equal("email", email)],
   });
-
-  return result.total > 0 ? result.tables[0] : null;
+  console.log(result);
+  return result.total > 0 ? result.rows[0] : null;
 };
 
 const handleError = (error: unknown, message: string) => {
@@ -32,19 +62,19 @@ const handleError = (error: unknown, message: string) => {
   throw error;
 };
 
-const sendEmailOTP = async ({ email }: { email: string }) => {
-  const { account } = await createAdminClient();
+// const sendEmailOTP = async ({ email }: { email: string }) => {
+//   const { account } = await createAdminClient();
 
-  try {
-    const session = await account.createEmailToken({
-      userId: ID.unique(),
-      email: email,
-    });
-    return session.userId;
-  } catch (error) {
-    handleError(error, "Failed to send email OTP");
-  }
-};
+//   try {
+//     const session = await account.createEmailToken({
+//       userId: ID.unique(),
+//       email: email,
+//     });
+//     return session.userId;
+//   } catch (error) {
+//     handleError(error, "Failed to send email OTP");
+//   }
+// };
 
 export const createAccount = async ({
   fullName,
@@ -53,26 +83,26 @@ export const createAccount = async ({
   fullName: string;
   email: string;
 }) => {
-  const existingUser = await getUserByEmail(email);
+  //   const existingUser = await getUserByEmail(email);
 
-  const accountId = await sendEmailOTP({ email });
-  if (!accountId) throw new Error("Failed to send an OTP");
+  //   const accountId = await sendEmailOTP({ email });
+  //   if (!accountId) throw new Error("Failed to send an OTP");
 
-  if (!existingUser) {
-    const { databases } = await createAdminClient();
-
-    await databases.createRow({
-      databaseId: appwriteConfig.databaseId,
-      tableId: appwriteConfig.usersTableId,
-      rowId: ID.unique(),
-      data: {
-        fullName,
-        email,
-        avatar: "https://avatar.iran.liara.run/public/boy?username=Ash",
-        accountId,
-      },
-    });
-  }
+  //   if (!existingUser) {
+  const { databases } = await createDummyClient();
+  const accountId = ID.unique();
+  await databases.createRow({
+    databaseId: appwriteConfig.databaseId,
+    tableId: appwriteConfig.usersTableId,
+    rowId: ID.unique(),
+    data: {
+      fullName,
+      email,
+      avatar: "https://avatar.iran.liara.run/public/boy?username=Ash",
+      accountId,
+    },
+  });
+  //   }
   console.log(accountId);
   return parseStringify({ accountId });
 };
