@@ -16,12 +16,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { createAdminClient, createDummyClient } from "@/lib/appwrite";
-import {
-  createAccount,
-  getUsers,
-  insertUsers,
-} from "@/lib/actions/user.actions";
+import { createAdminClient } from "@/lib/appwrite";
+import { createAccount } from "@/lib/actions/user.actions";
 import { ID } from "node-appwrite";
 
 // declaring that there are only two types possible, A or B
@@ -63,7 +59,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
         fullName: values.fullName || "",
         email: values.email,
       });
-      // setAccountId(user.accountId);
+      setAccountId(user.accountId);
     } catch (error) {
       console.log(error);
       setErrorMessage("Failed to create account. Please try again");
@@ -72,25 +68,6 @@ const AuthForm = ({ type }: { type: FormType }) => {
     }
   };
 
-  // const email = "ant@mail.com";
-  // const fullName = "Ant";
-  // const accountIdD = ID.unique();
-
-  // const onSubmit = async () => {
-  //   setIsLoading(true);
-  //   setErrorMessage("");
-
-  //   try {
-  //     const users = await insertUsers(email, fullName, accountIdD);
-  //     console.log(users);
-  //     console.log("new customer");
-  //   } catch (error) {
-  //     console.log(error);
-  //     setErrorMessage("Failed to create account. Please try again");
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
   return (
     <>
       <Form {...form}>

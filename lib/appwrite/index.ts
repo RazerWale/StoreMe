@@ -6,19 +6,6 @@ import { Account, TablesDB, Storage, Avatars } from "node-appwrite";
 
 const sdk = require("node-appwrite");
 
-export const createDummyClient = async () => {
-  const client = new sdk.Client()
-    .setEndpoint(appwriteConfig.endpointUrl)
-    .setProject(appwriteConfig.projectId)
-    .setKey(appwriteConfig.secretKey);
-
-  return {
-    get databases() {
-      return new TablesDB(client);
-    },
-  };
-};
-
 export const createSessionClient = async () => {
   const client = new sdk.Client()
     .setEndpoint(appwriteConfig.endpointUrl)
@@ -40,10 +27,9 @@ export const createAdminClient = async () => {
     .setProject(appwriteConfig.projectId)
     .setKey(appwriteConfig.secretKey);
 
-  const session = (await cookies()).get("appwrite-sesion");
-  if (!session || !session.value) throw new Error("No session");
-
-  client.setSession(session.value);
+  // const session = (await cookies()).get("appwrite-session");
+  // if (!session || !session.value) throw new Error("No session");
+  // client.setSession(session.value);
 
   return {
     get account() {
