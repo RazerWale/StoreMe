@@ -19,6 +19,7 @@ import {
 import { createAdminClient } from "@/lib/appwrite";
 import { createAccount } from "@/lib/actions/user.actions";
 import { ID } from "node-appwrite";
+import OTPModel from "./OTPModel";
 
 // declaring that there are only two types possible, A or B
 type FormType = "sign-in" | "sign-up";
@@ -61,7 +62,6 @@ const AuthForm = ({ type }: { type: FormType }) => {
       });
       setAccountId(user.accountId);
     } catch (error) {
-      console.log(error);
       setErrorMessage("Failed to create account. Please try again");
     } finally {
       setIsLoading(false);
@@ -147,6 +147,9 @@ const AuthForm = ({ type }: { type: FormType }) => {
         </form>
       </Form>
       {/* {OTP authentication} */}
+      {true && (
+        <OTPModel email={form.getValues("email")} accountId={accountId} />
+      )}
     </>
   );
 };
