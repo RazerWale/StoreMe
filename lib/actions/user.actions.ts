@@ -5,6 +5,7 @@ import { createAdminClient, createSessionClient } from "../appwrite";
 import { appwriteConfig } from "../appwrite/config";
 import { string } from "zod";
 import { parseStringify } from "../utils";
+import { cookies } from "next/headers";
 
 // Create account Flow
 // 1. User enters full name and email
@@ -31,7 +32,7 @@ const handleError = (error: unknown, message: string) => {
   throw error;
 };
 
-const sendEmailOTP = async ({ email }: { email: string }) => {
+export const sendEmailOTP = async ({ email }: { email: string }) => {
   const { account } = await createAdminClient();
 
   try {
@@ -78,23 +79,25 @@ export const createAccount = async ({
 };
 
 export const verifySecret = async ({
-  account,
-  password,
+  userId,
+  secret,
 }: {
-  account: string;
-  password: string;
+  userId: string;
+  secret: string;
 }) => {
   try {
     const { account } = await createAdminClient();
 
-    const session = await account.createSession({ accountId, password });
+    const session = await account.createSession({ userId, secret });
 
     (await cookies()).set("appwrite-session", session.secret, {
-      path: "/",
-      httpOnly: true,
-      sameSite: "strict",
-      secure: true,
+      path: "/", // "/" = the cookie is available everywhere on your website.
+      httpOnly: true, // This is very important for security.
+      sameSite: "strict", // Controls when cookies are sent between different websites.
+      secure: true, // Cookie is only sent over HTTPS
     });
+
+    return parseStringify({ sessionId: session.$id });
   } catch (error) {
     handleError(error, "Failed to verify OTP");
   }
