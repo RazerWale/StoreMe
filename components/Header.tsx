@@ -3,6 +3,7 @@ import { Button } from "./ui/button";
 import Image from "next/image";
 import Search from "./Search";
 import FileUploader from "./FileUploader";
+import { logoutUser } from "@/lib/actions/user.actions";
 
 const Header = () => {
   return (
@@ -10,7 +11,14 @@ const Header = () => {
       <Search />
       <div className="header-wrapper">
         <FileUploader />
-        <form action="">
+        <form
+          action={async () => {
+            // new React 19 functionality - allows you to run server side functions from your client components
+            "use server";
+
+            await logoutUser();
+          }}
+        >
           <Button type="submit" className="sign-out-button">
             <Image
               src="/assets/icons/logout.svg"

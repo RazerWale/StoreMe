@@ -7,6 +7,7 @@ import { string } from "zod";
 import { parseStringify } from "../utils";
 import { cookies } from "next/headers";
 import { avatarPlaceholder } from "@/constants";
+import { redirect } from "next/navigation";
 
 // Create account Flow
 // 1. User enters full name and email
@@ -120,4 +121,17 @@ export const getCurrentUser = async () => {
   if (user.total <= 0) return null;
 
   return parseStringify(user.rows[0]);
+};
+
+export const logoutUser = async () => {
+  const { account } = await createSessionClient();
+
+  try {
+    await account.deleteSession({ sessionId: "current" });
+    (await cookies()).delete("appwrite-session");
+  } catch (error) {
+    handleError(error, "Failed to sign out user");
+  } finally {
+    redirect("/sign-in");
+  }
 };
