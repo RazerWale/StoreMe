@@ -6,6 +6,7 @@ import { appwriteConfig } from "../appwrite/config";
 import { string } from "zod";
 import { parseStringify } from "../utils";
 import { cookies } from "next/headers";
+import { avatarPlaceholder } from "@/constants";
 
 // Create account Flow
 // 1. User enters full name and email
@@ -33,7 +34,7 @@ const handleError = (error: unknown, message: string) => {
 };
 
 export const sendEmailOTP = async ({ email }: { email: string }) => {
-  const { account } = await createAdminClient();
+  const { account } = await createSessionClient();
 
   try {
     const session = await account.createEmailToken({
@@ -67,7 +68,7 @@ export const createAccount = async ({
       data: {
         fullName,
         email,
-        avatar: "https://avatar.iran.liara.run/public/boy?username=Ash",
+        avatar: avatarPlaceholder,
         accountId,
       },
     });
@@ -101,4 +102,22 @@ export const verifySecret = async ({
   } catch (error) {
     handleError(error, "Failed to verify OTP");
   }
+};
+
+export const getCurrentUser = async () => {
+  const { databases, account } = await createSessionClient();
+
+  const result = await account.get();
+
+  console.log(result);
+
+  const user = await databases.listRows({
+    databaseId: appwriteConfig.databaseId,
+    tableId: appwriteConfig.usersTableId,
+    queries: [Query.equal("accountId", result.$id)],
+  });
+
+  if (user.total <= 0) return null;
+
+  return parseStringify(user.rows[0]);
 };

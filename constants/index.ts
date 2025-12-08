@@ -25,3 +25,5 @@ export const navItems = [
     url: "/others",
   },
 ];
+export const avatarPlaceholder =
+  "https://avatar.iran.liara.run/public/boy?username=Ash";
