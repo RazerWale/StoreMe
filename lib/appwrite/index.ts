@@ -12,11 +12,10 @@ export const createSessionClient = async () => {
     .setProject(appwriteConfig.projectId);
 
   const session = (await cookies()).get("appwrite-session");
-  console.log(session);
 
-  if (!session || !session.value) throw new Error("No session");
-
-  client.setSession(session.value);
+  if (session?.value) {
+    client.setSession(session.value);
+  }
 
   return {
     get account() {
@@ -34,9 +33,9 @@ export const createAdminClient = async () => {
     .setProject(appwriteConfig.projectId)
     .setKey(appwriteConfig.secretKey);
 
-  const session = (await cookies()).get("appwrite-session");
-  if (!session || !session.value) throw new Error("No session");
-  client.setSession(session.value);
+  // const session = (await cookies()).get("appwrite-session");
+  // // if (!session || !session.value) throw new Error("No session");
+  // client.setSession(session.value);
 
   return {
     get account() {
