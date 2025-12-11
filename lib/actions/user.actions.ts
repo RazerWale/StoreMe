@@ -42,7 +42,8 @@ export const sendEmailOTP = async ({ email }: { email: string }) => {
       userId: ID.unique(),
       email: email,
     });
-    console.log(session);
+    console.log("session userId - ", session.userId);
+    console.log("session email - ", session);
     return session.userId;
   } catch (error) {
     handleError(error, "Failed to send email OTP");
@@ -98,7 +99,9 @@ export const verifySecret = async ({
       sameSite: "strict", // Controls when cookies are sent between different websites.
       secure: true, // Cookie is only sent over HTTPS
     });
-
+    console.log("secret-", secret);
+    console.log("userId--", userId);
+    console.log("session-", session);
     return parseStringify({ sessionId: session.$id });
   } catch (error) {
     handleError(error, "Failed to verify OTP");
@@ -139,10 +142,10 @@ export const logoutUser = async () => {
 export const signInUser = async ({ email }: { email: string }) => {
   try {
     const existingUser = await getUserByEmail(email);
-
+    console.log("existingUser -", existingUser);
     if (existingUser) {
       await sendEmailOTP({ email });
-      return parseStringify({ accounntId: existingUser.accountId });
+      return parseStringify({ accountId: existingUser.accountId });
     }
     return parseStringify({ accountId: null, error: "User not found" });
   } catch (error) {
