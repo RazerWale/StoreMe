@@ -37,6 +37,10 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
       {files.length > 0 && (
         <ul className="uploader-preview-list">
           <h4 className="h4 text-light-100">Uploading</h4>
+
+          {files.map(file, index) =>{
+            const {type,etention} = getFileType(file,name)
+          }}
         </ul>
       )}
 
